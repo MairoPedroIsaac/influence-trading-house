@@ -1,0 +1,59 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+   output   = "../node_modules/.prisma/client" // Add this line
+}
+
+model Contact {
+  id             String        @id @default(uuid())
+  fullName       String
+  email          String?
+  country        String
+  broker         String?
+  hasMT5         Boolean?
+  areaOfInterest String?
+  investmentPlan String?
+  createdAt      DateTime      @default(now())
+  investments  Investment[] @relation("ContactInvestments") // Corrected backRelation
+
+}
+
+model Fund {
+  id          String        @id @default(uuid())
+  name        String
+  type        String
+  duration    Int          // <-- Remove the ?
+  minAmount   Float
+  roiTarget   Float
+  description String
+  aiVersion   String?       // <-- This line
+  createdAt   DateTime      @default(now())
+  investments  Investment[] @relation("FundInvestments") // Corrected backRelation
+}
+
+model Investment {
+  id         String   @id @default(uuid())
+  amount     Float
+  startDate  DateTime
+  endDate    DateTime
+  contactId  String
+  fundId     String
+  contact    Contact  @relation(fields: [contactId], references: [id], name: "ContactInvestments")
+  fund       Fund     @relation(fields: [fundId], references: [id], name: "FundInvestments")
+  createdAt  DateTime @default(now())
+  aiVersion  String   @default("InfluenceX AI v1.0")  // ✅ Track AI versions
+  status     String   @default("AI Processing")       // ✅ Track lifecycle
+  profit     Float?   // <-- Add this line
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
