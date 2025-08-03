@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard | Influence Trading House</title>
+    <link rel="shortcut icon" href="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/global/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/global/css/all.min.css">
+    <link rel="stylesheet" href="assets/global/css/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/templates/basic/css/main.css">
+    <link rel="stylesheet" href="assets/templates/basic/css/custom.css">
+    <style>
+        body {
+            background: #10131a;
+            color: #fff;
+        }
+        .sidebar {
+            background: #181c24;
+            min-height: 100vh;
+            padding: 32px 0 0 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            z-index: 100;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 18px;
+            font-size: 1.1rem;
+            border-radius: 8px 0 0 8px;
+            padding: 12px 24px;
+            transition: background 0.2s;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background: #1e90ff;
+            color: #fff;
+        }
+        .dashboard-content {
+            margin-left: 240px;
+            padding: 40px 32px;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .dashboard-header .logo img {
+            height: 48px;
+        }
+        .stats-cards {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .stats-card {
+            background: #232733;
+            border-radius: 16px;
+            padding: 28px 32px;
+            min-width: 200px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(30,144,255,0.08);
+        }
+        .stats-card h3 {
+            color: #1e90ff;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .stats-card span {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .table-section {
+            background: #181c24;
+            border-radius: 16px;
+            padding: 32px 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 24px rgba(30,144,255,0.08);
+        }
+        .table-section h4 {
+            color: #1e90ff;
+            margin-bottom: 18px;
+        }
+        .table {
+            color: #fff;
+            background: transparent;
+        }
+        .table th, .table td {
+            border-color: #232733;
+        }
+        .btn--base {
+            background: #1e90ff;
+            color: #fff;
+            border-radius: 25px;
+            padding: 8px 22px;
+            font-weight: 600;
+            border: none;
+            transition: background 0.3s;
+        }
+        .btn--base:hover {
+            background: #1560a8;
+            color: #fff;
+        }
+        .logout-btn {
+            background: #ff4d4f;
+            color: #fff;
+            border-radius: 25px;
+            padding: 8px 22px;
+            font-weight: 600;
+            border: none;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        @media (max-width: 900px) {
+            .sidebar { width: 100px; }
+            .dashboard-content { margin-left: 120px; padding: 20px 8px; }
+            .stats-cards { flex-direction: column; gap: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column">
+        <div class="text-center mb-5">
+            <img src="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" alt="Influence Trading House" style="height: 48px;">
+        </div>
+        <a href="#" class="nav-link active" id="nav-funds"><i class="las la-coins me-2"></i>Funds</a>
+        <a href="#" class="nav-link" id="nav-investments"><i class="las la-chart-line me-2"></i>Investments</a>
+        <a href="#" class="nav-link" id="nav-contacts"><i class="las la-address-book me-2"></i>Contacts</a>
+        <a href="#" class="nav-link" id="nav-admins"><i class="las la-user-shield me-2"></i>Admins</a>
+        <button class="logout-btn mt-auto mx-4 mb-4" id="logoutBtn"><i class="las la-sign-out-alt me-2"></i>Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <div class="logo">
+                <img src="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" alt="Influence Trading House">
+            </div>
+            <div>
+                <span id="adminEmail" style="color:#1e90ff; font-weight:600;">admin@example.com</span>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stats-card">
+                <h3 id="fundsCount">0</h3>
+                <span>Total Funds</span>
+            </div>
+            <div class="stats-card">
+                <h3 id="investmentsCount">0</h3>
+                <span>Total Investments</span>
+            </div>
+            <div class="stats-card">
+                <h3 id="contactsCount">0</h3>
+                <span>Total Contacts</span>
+            </div>
+            <div class="stats-card">
+                <h3 id="adminsCount">0</h3>
+                <span>Total Admins</span>
+            </div>
+        </div>
+
+        <!-- Funds Table -->
+        <div class="table-section" id="section-funds">
+            <h4>Funds</h4>
+            <button class="btn btn--base mb-3" id="addFundBtn"><i class="las la-plus"></i> Add Fund</button>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Duration</th>
+                            <th>Min Amount</th>
+                            <th>ROI Target</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fundsTableBody">
+                        <!-- Funds data here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Investments Table -->
+        <div class="table-section d-none" id="section-investments">
+            <h4>Investments</h4>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fund</th>
+                            <th>Investor</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentsTableBody">
+                        <!-- Investments data here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contacts Table -->
+        <div class="table-section d-none" id="section-contacts">
+            <h4>Contacts</h4>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Country</th>
+                            <th>Broker</th>
+                            <th>Area of Interest</th>
+                            <th>Investment Plan</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactsTableBody">
+                        <!-- Contacts data here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Admins Table -->
+        <div class="table-section d-none" id="section-admins">
+            <h4>Admins</h4>
+            <button class="btn btn--base mb-3" id="addAdminBtn"><i class="las la-plus"></i> Add Admin</button>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminsTableBody">
+                        <!-- Admins data here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/global/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/global/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar navigation logic
+        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+        const sections = [
+            document.getElementById('section-funds'),
+            document.getElementById('section-investments'),
+            document.getElementById('section-contacts'),
+            document.getElementById('section-admins')
+        ];
+        navLinks.forEach((link, idx) => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                sections.forEach((sec, i) => sec.classList.toggle('d-none', i !== idx));
+            });
+        });
+
+        // TODO: Fetch and display stats and table data from backend using AJAX/fetch
+        // TODO: Implement add/edit/delete modals and actions for each section
+        // TODO: Implement logout logic
+
+        // Example: Set admin email (replace with real data after login)
+        document.getElementById('adminEmail').textContent = "admin@example.com";
+    </script>
+</body>
+</html>

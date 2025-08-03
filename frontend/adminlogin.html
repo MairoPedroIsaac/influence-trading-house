@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login | Influence Trading House</title>
+    <link rel="shortcut icon" href="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/global/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/global/css/all.min.css">
+    <link rel="stylesheet" href="assets/global/css/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/templates/basic/css/main.css">
+    <link rel="stylesheet" href="assets/templates/basic/css/custom.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: #181c24;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(30,144,255,0.10);
+            padding: 48px 32px 32px 32px;
+            max-width: 400px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .login-logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .login-logo img {
+            height: 70px;
+            width: auto;
+        }
+        .section-title {
+            color: #1e90ff;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-label {
+            color: #fff;
+            font-weight: 500;
+        }
+        .form-control {
+            background: #232733;
+            color: #fff;
+            border: 1px solid #1e90ff;
+            border-radius: 8px;
+        }
+        .form-control:focus {
+            border-color: #1560a8;
+            box-shadow: 0 0 0 2px #1e90ff33;
+            background: #232733;
+            color: #fff;
+        }
+        .btn--base {
+            background: #1e90ff;
+            color: #fff;
+            border-radius: 25px;
+            padding: 10px 28px;
+            font-weight: 600;
+            border: none;
+            transition: background 0.3s;
+        }
+        .btn--base:hover {
+            background: #1560a8;
+            color: #fff;
+        }
+        .forgot-link {
+            color: #1e90ff;
+            font-size: 0.95rem;
+            text-decoration: none;
+            float: right;
+            margin-top: 6px;
+        }
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            margin-top: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" alt="Influence Trading House">
+        </div>
+        <h2 class="section-title">Admin Login</h2>
+        <form id="adminLoginForm" method="POST" action="/api/admin/login">
+            <div class="mb-3">
+                <label for="email" class="form-label">Admin Email</label>
+                <input type="email" class="form-control" id="email" name="email" required autocomplete="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn--base w-100 mt-2">Login</button>
+            <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+        </form>
+        <div id="formSuccess" class="alert alert-success d-none" role="alert">
+            Login successful! Redirecting...
+        </div>
+        <div id="formError" class="alert alert-danger d-none" role="alert">
+            Invalid credentials. Please try again.
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:#181c24; color:#fff;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="resetPasswordModalLabel">Reset Password</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="resetPasswordForm">
+              <div class="mb-3">
+                <label for="resetEmail" class="form-label">Admin Email</label>
+                <input type="email" class="form-control" id="resetEmail" name="resetEmail" required>
+              </div>
+              <button type="submit" class="btn btn--base w-100">Send Reset Link</button>
+            </form>
+            <div id="resetSuccess" class="alert alert-success d-none mt-3" role="alert">
+                If this email exists, a reset link has been sent.
+            </div>
+            <div id="resetError" class="alert alert-danger d-none mt-3" role="alert">
+                Error sending reset link. Please try again.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/global/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/global/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Admin login AJAX
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                email: form.email.value,
+                password: form.password.value
+            };
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    document.getElementById('formSuccess').classList.remove('d-none');
+                    document.getElementById('formError').classList.add('d-none');
+                    setTimeout(() => {
+                        window.location.href = "admindashboard.html";
+                    }, 1200);
+                } else {
+                    document.getElementById('formError').classList.remove('d-none');
+                    document.getElementById('formSuccess').classList.add('d-none');
+                }
+            } catch (err) {
+                document.getElementById('formError').classList.remove('d-none');
+                document.getElementById('formSuccess').classList.add('d-none');
+            }
+        });
+
+        // Show reset password modal
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            var modal = new bootstrap.Modal(document.getElementById('resetPasswordModal'));
+            modal.show();
+        });
+
+        // Reset password AJAX (adjust endpoint as needed)
+        document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            try {
+                const response = await fetch('/api/admin/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                if (response.ok) {
+                    document.getElementById('resetSuccess').classList.remove('d-none');
+                    document.getElementById('resetError').classList.add('d-none');
+                } else {
+                    document.getElementById('resetError').classList.remove('d-none');
+                    document.getElementById('resetSuccess').classList.add('d-none');
+                }
+            } catch (err) {
+                document.getElementById('resetError').classList.remove('d-none');
+                document.getElementById('resetSuccess').classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

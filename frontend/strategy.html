@@ -3,10 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contact | Influence Trading House</title>
-    <meta name="description" content="Contact Influence Trading House for support, questions, or partnership.">
+    <title>Strategy | Influence Trading House</title>
     <link rel="shortcut icon" href="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" type="image/x-icon">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/global/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/global/css/all.min.css">
     <link rel="stylesheet" href="assets/global/css/line-awesome.min.css">
@@ -32,57 +30,85 @@
             margin: 0 15px;
             transition: color 0.3s;
         }
-        .navbar-nav .nav-link:hover, .navbar-nav li a:hover, .navbar-nav .active > a {
+        .navbar-nav .nav-link:hover, .navbar-nav li a:hover, .navbar-nav .active > a,
+        .navbar-nav .active > .nav-link {
             color: #1e90ff !important;
         }
-        .btn--base {
-            background: #1e90ff;
-            color: #fff;
-            border-radius: 25px;
-            padding: 10px 28px;
-            font-weight: 600;
-            border: none;
-            transition: background 0.3s;
-        }
-        .btn--base:hover {
-            background: #1560a8;
-            color: #fff;
+        .navbar-nav .active > a, .navbar-nav .active > .nav-link {
+            font-weight: 700;
         }
         .section-title {
             color: #1e90ff !important;
             font-weight: 700;
         }
-        .contact-section {
-            padding: 100px 0 60px 0;
-            background: transparent;
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: center;
+            margin: 40px 0 24px 0;
         }
-        .contact-form-box {
-            background: #15181f;
+        .card {
+            background: #181c24;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(30,144,255,0.10);
-            padding: 40px 32px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .form-label {
+            padding: 32px 24px;
+            min-width: 260px;
+            max-width: 320px;
             color: #fff;
-            font-weight: 500;
+            border: 1px solid rgba(30,144,255,0.08);
+            transition: box-shadow 0.3s;
         }
-        .form-control {
-            background: #232733;
+        .card:hover {
+            box-shadow: 0 12px 40px rgba(30,144,255,0.18);
+        }
+        .card h3 {
+            font-size: 1.3rem;
+            color: #1e90ff;
+            font-weight: 700;
+        }
+        .price {
+            font-size: 1.5rem;
             color: #fff;
-            border: 1px solid #1e90ff;
-            border-radius: 8px;
+            font-weight: 700;
+            margin: 12px 0;
         }
-        .form-control:focus {
-            border-color: #1560a8;
-            box-shadow: 0 0 0 2px #1e90ff33;
-            background: #232733;
+        .card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .card ul li {
+            margin-bottom: 8px;
+            padding-left: 18px;
+            position: relative;
+        }
+        .card ul li:before {
+            content: "✔️";
+            position: absolute;
+            left: 0;
+            color: #1e90ff;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 32px;
+        }
+        .btn-success {
+            background: #00c48c;
+            border: none;
+            color: #fff;
+            border-radius: 25px;
+            padding: 12px 32px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+        .btn-success:hover {
+            background: #009e6e;
             color: #fff;
         }
-        .footer-logo img {
-            height: 60px;
-            width: auto;
+        @media (max-width: 900px) {
+            .pricing-cards { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -106,46 +132,59 @@
                             <li><a href="about.html">About</a></li>
                             <li><a href="investments.html">Investments</a></li>
                             <li><a href="signals.html">Signals</a></li>
-                            <li><a href="strategy.html">Strategy</a></li>
+                            <li class="active"><a href="strategy.html">Strategy</a></li>
                             <li><a href="blog.html">Blog</a></li>
-                            <li class="active"><a href="contact.html">Contact</a></li>
+                            <li><a href="contact.html">Contact</a></li>
                         </ul>
-                        
                     </div>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- Contact Section -->
-    <section class="contact-section">
+    <section id="strategy" class="section py-5" style="padding-top:100px;"></section>
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="section-title mb-3">Contact Us</h2>
-                <p class="lead">Have a question, need support, or want to partner with us? Fill out the form below and our team will get back to you soon.</p>
+            <h2 class="section-title text-center mb-3"> Triple Flow Profit System</h2>
+            <p class="text-center mb-4">Master our in-house rule-based trading system. Built for accuracy, trend timing, and emotional control in the markets.</p>
+
+            <div class="pricing-cards">
+                <div class="card">
+                    <h3>Basic Strategy Guide</h3>
+                    <p class="price">$250</p>
+                    <ul>
+                        <li>Full PDF guide</li>
+                        <li>Step-by-step system explanation</li>
+                        <li>Risk management rules</li>
+                        <li>Video walkthroughs (coming soon)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Complete Mentorship (2 Weeks)</h3>
+                    <p class="price">$500</p>
+                    <ul>
+                        <li>Includes Strategy Guide content</li>
+                        <li>Private chart reviews</li>
+                        <li>Technical analysis training</li>
+                        <li>Breakout and S/R strategies</li>
+                        <li>Risk management deep dive</li>
+                        <li>Telegram mentorship group access</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Elite Mentorship (4 Weeks)</h3>
+                    <p class="price">$800</p>
+                    <ul>
+                        <li>Everything in 2-Week Mentorship</li>
+                        <li>Spike detection techniques</li>
+                        <li>Introduction to AI trading logic</li>
+                        <li>Real-time feedback + strategy building</li>
+                        <li>Exclusive Elite group access (coming soon) </li>
+                    </ul>
+                </div>
             </div>
-            <div class="contact-form-box">
-                <form id="contactForm" method="POST" action="/api/contact">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn--base w-100 mt-2">Send Message</button>
-                </form>
-                <div id="formSuccess" class="alert alert-success mt-3 d-none" role="alert">
-                    Thank you for contacting us! We will get back to you soon.
-                </div>
-                <div id="formError" class="alert alert-danger mt-3 d-none" role="alert">
-                    Something went wrong. Please try again later.
-                </div>
+
+            <div class="cta">
+                <a href="https://wa.me/2348132757678" class="btn btn-success" target="_blank">Start Mentorship</a>
             </div>
         </div>
     </section>
@@ -175,37 +214,7 @@
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
     <script src="assets/global/js/jquery-3.7.1.min.js"></script>
     <script src="assets/global/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // AJAX form submission for contact form
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = {
-                name: form.name.value,
-                email: form.email.value,
-                message: form.message.value
-            };
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (response.ok) {
-                    window.location.href = "thankyou.html";
-                } else {
-                    document.getElementById('formError').classList.remove('d-none');
-                    document.getElementById('formSuccess').classList.add('d-none');
-                }
-            } catch (err) {
-                document.getElementById('formError').classList.remove('d-none');
-                document.getElementById('formSuccess').classList.add('d-none');
-            }
-        });
-    </script>
 </body>
 </html>

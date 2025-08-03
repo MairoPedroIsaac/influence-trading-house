@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contact | Influence Trading House</title>
-    <meta name="description" content="Contact Influence Trading House for support, questions, or partnership.">
+    <title>Blog | Influence Trading House</title>
+    <meta name="description" content="Read the latest news, tips, and insights from Influence Trading House.">
     <link rel="shortcut icon" href="assets/images/logoIcon/Influence_Trading_House_New_Logo-removebg-preview.png" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/global/css/bootstrap.min.css">
@@ -52,33 +52,57 @@
             color: #1e90ff !important;
             font-weight: 700;
         }
-        .contact-section {
-            padding: 100px 0 60px 0;
-            background: transparent;
+        .blog-section {
+            padding: 80px 0 60px 0;
         }
-        .contact-form-box {
-            background: #15181f;
+        .blog-card {
+            background: #181c24;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(30,144,255,0.10);
-            padding: 40px 32px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .form-label {
+            padding: 0 0 24px 0;
+            margin-bottom: 32px;
             color: #fff;
-            font-weight: 500;
+            border: 1px solid rgba(30,144,255,0.08);
+            transition: box-shadow 0.3s, transform 0.2s;
+            overflow: hidden;
         }
-        .form-control {
-            background: #232733;
-            color: #fff;
-            border: 1px solid #1e90ff;
-            border-radius: 8px;
+        .blog-card:hover {
+            box-shadow: 0 12px 40px rgba(30,144,255,0.18);
+            transform: translateY(-4px) scale(1.02);
         }
-        .form-control:focus {
-            border-color: #1560a8;
-            box-shadow: 0 0 0 2px #1e90ff33;
-            background: #232733;
-            color: #fff;
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 18px 18px 0 0;
+        }
+        .blog-card-body {
+            padding: 24px;
+        }
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e90ff;
+            margin-bottom: 10px;
+        }
+        .blog-date {
+            font-size: 0.95rem;
+            color: #a0aec0;
+            margin-bottom: 8px;
+        }
+        .blog-desc {
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+        }
+        .read-more {
+            color: #1e90ff;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .read-more:hover {
+            color: #1560a8;
         }
         .footer-logo img {
             height: 60px;
@@ -107,45 +131,61 @@
                             <li><a href="investments.html">Investments</a></li>
                             <li><a href="signals.html">Signals</a></li>
                             <li><a href="strategy.html">Strategy</a></li>
-                            <li><a href="blog.html">Blog</a></li>
-                            <li class="active"><a href="contact.html">Contact</a></li>
+                            <li class="active"><a href="blog.html">Blog</a></li>
+                            <li><a href="contact.html">Contact</a></li>
                         </ul>
-                        
+                       
                     </div>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- Contact Section -->
-    <section class="contact-section">
+    <!-- Blog Section -->
+    <section class="blog-section">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="section-title mb-3">Contact Us</h2>
-                <p class="lead">Have a question, need support, or want to partner with us? Fill out the form below and our team will get back to you soon.</p>
+                <h2 class="section-title mb-3">Our Latest News & Insights</h2>
+                <p class="lead">Stay updated with trading tips, market analysis, and company news from Influence Trading House.</p>
             </div>
-            <div class="contact-form-box">
-                <form id="contactForm" method="POST" action="/api/contact">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+            <div class="row">
+                <!-- Blog Card 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="blog-card">
+                        <img src="assets/images/frontend/blog/thumb_6378a4cea928a1668850894.jpg" alt="Mastering Technical Analysis">
+                        <div class="blog-card-body">
+                            <div class="blog-date"><i class="las la-calendar-alt me-2"></i>13 Nov 2022</div>
+                            <div class="blog-title">Mastering Technical Analysis: A Beginner’s Guide</div>
+                            <div class="blog-desc">Learn the basics of technical analysis and how to use charts and indicators to improve your trading decisions.</div>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn--base w-100 mt-2">Send Message</button>
-                </form>
-                <div id="formSuccess" class="alert alert-success mt-3 d-none" role="alert">
-                    Thank you for contacting us! We will get back to you soon.
                 </div>
-                <div id="formError" class="alert alert-danger mt-3 d-none" role="alert">
-                    Something went wrong. Please try again later.
+                <!-- Blog Card 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="blog-card">
+                        <img src="assets/images/frontend/blog/thumb_6378a4caca7d01668850890.jpg" alt="Top 5 Trading Strategies">
+                        <div class="blog-card-body">
+                            <div class="blog-date"><i class="las la-calendar-alt me-2"></i>13 Nov 2022</div>
+                            <div class="blog-title">Top 5 Trading Strategies for Consistent Profits</div>
+                            <div class="blog-desc">Discover proven trading strategies that can help you achieve consistent results in forex, crypto, and stocks.</div>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
                 </div>
+                <!-- Blog Card 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="blog-card">
+                        <img src="assets/images/frontend/blog/thumb_6378a4c776f3b1668850887.jpg" alt="Breaking Down Forex Signals">
+                        <div class="blog-card-body">
+                            <div class="blog-date"><i class="las la-calendar-alt me-2"></i>13 Nov 2022</div>
+                            <div class="blog-title">Breaking Down Forex Signals: How to Use Them for Better Trades</div>
+                            <div class="blog-desc">Understand how to interpret and act on forex signals to maximize your trading opportunities.</div>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more blog cards as needed -->
             </div>
         </div>
     </section>
@@ -179,33 +219,5 @@
     <!-- Scripts -->
     <script src="assets/global/js/jquery-3.7.1.min.js"></script>
     <script src="assets/global/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // AJAX form submission for contact form
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = {
-                name: form.name.value,
-                email: form.email.value,
-                message: form.message.value
-            };
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (response.ok) {
-                    window.location.href = "thankyou.html";
-                } else {
-                    document.getElementById('formError').classList.remove('d-none');
-                    document.getElementById('formSuccess').classList.add('d-none');
-                }
-            } catch (err) {
-                document.getElementById('formError').classList.remove('d-none');
-                document.getElementById('formSuccess').classList.add('d-none');
-            }
-        });
-    </script>
 </body>
 </html>
