@@ -93,9 +93,9 @@ const Hero: React.FC = () => {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
-            Trade Smarter.
+            Institutional Edge.
             <br />
-            <span className="text-gradient-gold">Not Harder.</span>
+            <span className="text-gradient-gold">Retail Access.</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
