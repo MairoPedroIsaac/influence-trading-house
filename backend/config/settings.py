@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # Local
     "apps.users",
+    "apps.journal",
 ]
 
 MIDDLEWARE = [
