@@ -31,7 +31,7 @@ jobs:
           --health-retries 5
 
     env:
-      SECRET_KEY: ci-only-not-a-real-secret
+      SECRET_KEY: ci-only-not-a-real-secret-0123456789abcdef
       DEBUG: "False"
       ALLOWED_HOSTS: localhost,127.0.0.1
       POSTGRES_DB: ith_db

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",  # lets logout kill a refresh token
     "corsheaders",
     # Local
     "apps.users",
@@ -107,6 +108,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    # Rate limits for sensitive endpoints (per IP), to slow down password guessing.
+    "DEFAULT_THROTTLE_RATES": {
+        "auth": "10/min",
+        "password_reset": "5/hour",
+    },
 }
 
 # ─── SimpleJWT ────────────────────────────────────────────────────────────────
@@ -116,9 +122,31 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": False,
+    "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="http://localhost:5173", cast=Csv())
+
+
+# ─── Email ────────────────────────────────────────────────────────────────────
+# Development: emails are printed in the runserver terminal (console backend).
+# Production (AWS): switch to SMTP / Amazon SES through .env.
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = config("EMAIL_HOST", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Influence Trading House <no-reply@localhost>")
+
+# Where the React app lives (used to build password reset links).
+FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+
+# Password reset links expire after 1 hour.
+PASSWORD_RESET_TIMEOUT = 60 * 60
+
+# ─── Google sign in ───────────────────────────────────────────────────────────
+# OAuth client ID from Google Cloud Console (Credentials > OAuth client ID > Web).
+GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID", default="")

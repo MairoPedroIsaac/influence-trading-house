@@ -5,4 +5,10 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    // In development, send /api calls to Django so the browser sees one site.
+    proxy: {
+      '/api': 'http://127.0.0.1:8000',
+    },
+  },
 })
