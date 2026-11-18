@@ -7,6 +7,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # API v1 — more apps will be added in Step 2
+    # API v1
     path("api/v1/", include("apps.users.urls")),
+    path("api/v1/", include("apps.journal.urls")),
 ]
