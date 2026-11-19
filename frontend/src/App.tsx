@@ -3,6 +3,7 @@ import { RequireAuth } from './components/RequireAuth'
 import Dashboard from './pages/Dashboard'
 import ForgotPassword from './pages/ForgotPassword'
 import Home from './pages/Home'
+import Journal from './pages/Journal'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
@@ -22,6 +23,14 @@ function App() {
         element={
           <RequireAuth>
             <Dashboard />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/journal"
+        element={
+          <RequireAuth>
+            <Journal />
           </RequireAuth>
         }
       />

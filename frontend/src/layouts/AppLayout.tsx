@@ -19,7 +19,7 @@ const icon = (d: string) => (
 
 const MAIN: Item[] = [
   { to: '/dashboard', label: 'Overview', icon: icon('M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-18v6h8V3h-8Z') },
-  { to: '/journal', label: 'Trade journal', icon: icon('M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2Zm4-12h8M8 11h6'), soon: true },
+  { to: '/journal', label: 'Trade journal', icon: icon('M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2Zm4-12h8M8 11h6') },
   { to: '/strategies', label: 'Strategies', icon: icon('M4 20V10M10 20V4M16 20v-8M22 20H2'), soon: true },
   { to: '/backtests', label: 'Backtests', icon: icon('M3 3v18h18M7 15l4-4 3 3 5-6'), soon: true },
   { to: '/alerts', label: 'Alerts', icon: icon('M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0'), soon: true },
@@ -71,8 +71,8 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
 
   const sidebar = (
     <div className="flex h-full flex-col">
-      <Link to="/" className="flex h-16 items-center border-b border-line px-5" onClick={close}>
-        <img src={logo} alt="Influence Trading House" className="h-9" />
+      <Link to="/dashboard" aria-label="Go to overview" className="flex h-16 items-center border-b border-line px-5" onClick={close}>
+        <img src={logo} alt="Influence Trading House" className="h-10" />
       </Link>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">

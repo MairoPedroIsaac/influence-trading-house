@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Header } from '../components/Header'
 import { useAuth } from '../auth/useAuth'
 import { LiveChart } from '../components/LiveChart'
@@ -19,7 +19,11 @@ const features = [
 ]
 
 export default function Home() {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
+
+  // Logged-in users go straight to their dashboard.
+  if (user) return <Navigate to="/dashboard" replace />
+  if (loading) return <div className="min-h-screen bg-bg" />
 
   return (
     <div className="min-h-screen bg-bg text-fg">

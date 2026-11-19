@@ -64,11 +64,16 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="mt-8 rounded-lg border border-line bg-surface p-6">
-        <h2 className="font-medium">Your trades will show here</h2>
-        <p className="mt-1 text-sm text-muted">
-          Once the MT5 reporter is connected, every trade you take is saved here automatically.
-        </p>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line bg-surface p-6">
+        <div>
+          <h2 className="font-medium">Trade journal</h2>
+          <p className="mt-1 text-sm text-muted">
+            See every trade, add one by hand, or close an open one. Soon MT5 will fill it in automatically.
+          </p>
+        </div>
+        <Link to="/journal" className="rounded-md border border-line px-4 py-2 text-sm hover:border-fg">
+          Open journal
+        </Link>
       </div>
     </AppLayout>
   )
