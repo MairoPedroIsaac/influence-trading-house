@@ -9,7 +9,7 @@ import { Avatar } from '../components/Avatar'
 import { fullName } from '../lib/user'
 import { api, ApiError } from '../lib/api'
 import { useToast } from '../toast/useToast'
-import { setTheme, useTheme, type Theme } from '../lib/theme'
+import { setTheme, useThemeChoice, type ThemeChoice } from '../lib/theme'
 
 function Section({ title, text, children }: { title: string; text: string; children: ReactNode }) {
   return (
@@ -145,10 +145,11 @@ function PasswordForm({ user }: { user: User }) {
 }
 
 function ThemePicker() {
-  const theme = useTheme()
-  const options: { value: Theme; label: string }[] = [
+  const theme = useThemeChoice()
+  const options: { value: ThemeChoice; label: string }[] = [
     { value: 'dark', label: 'Dark' },
     { value: 'light', label: 'Light' },
+    { value: 'system', label: 'System' },
   ]
   return (
     <div role="radiogroup" aria-label="Theme" className="inline-flex rounded-md border border-line p-1">
@@ -200,7 +201,7 @@ export default function Profile() {
         <PasswordForm user={user} />
       </Section>
 
-      <Section title="Appearance" text="Choose how your dashboard looks. Saved on this device.">
+      <Section title="Appearance" text="Choose how your dashboard looks. System follows your device setting. Saved on this device.">
         <ThemePicker />
       </Section>
     </AppLayout>
