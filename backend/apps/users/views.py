@@ -14,6 +14,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, permissions, status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
@@ -21,6 +22,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from .avatars import AvatarError, process_avatar
 from .serializers import (
     ChangePasswordSerializer,
     ForgotPasswordSerializer,
@@ -69,6 +71,43 @@ class MeView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class AvatarView(APIView):
+    """
+    POST   /api/v1/auth/me/avatar/  (form field "avatar")  upload or replace my photo
+    DELETE /api/v1/auth/me/avatar/                          remove my photo
+    Both return my updated profile.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "upload"
+
+    def post(self, request):
+        upload = request.FILES.get("avatar")
+        if not upload:
+            return Response({"avatar": "Choose a photo to upload."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            cleaned = process_avatar(upload)
+        except AvatarError as exc:
+            return Response({"avatar": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        old = user.avatar.name if user.avatar else None
+        user.avatar.save(cleaned.name, cleaned, save=True)
+        if old:
+            user.avatar.storage.delete(old)
+        return Response(UserSerializer(user).data)
+
+    def delete(self, request):
+        user = request.user
+        if user.avatar:
+            name = user.avatar.name
+            user.avatar = None
+            user.save(update_fields=["avatar"])
+            user._meta.get_field("avatar").storage.delete(name)
+        return Response(UserSerializer(user).data)
 
 
 class LogoutView(APIView):

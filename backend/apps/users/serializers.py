@@ -51,15 +51,20 @@ class UserSerializer(serializers.ModelSerializer):
     """The logged-in user's profile. Only the names can be changed."""
 
     has_password = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["id", "email", "first_name", "last_name", "date_joined", "has_password"]
-        read_only_fields = ["id", "email", "date_joined", "has_password"]
+        fields = ["id", "email", "first_name", "last_name", "date_joined", "has_password", "avatar_url"]
+        read_only_fields = ["id", "email", "date_joined", "has_password", "avatar_url"]
 
     def get_has_password(self, obj):
         # False for accounts created with Google only.
         return obj.has_usable_password()
+
+    def get_avatar_url(self, obj):
+        # With S3 this is a signed link that works for 1 hour.
+        return obj.avatar.url if obj.avatar else None
 
 
 class ChangePasswordSerializer(serializers.Serializer):

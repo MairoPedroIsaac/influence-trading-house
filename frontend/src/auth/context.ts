@@ -7,6 +7,7 @@ export type User = {
   last_name: string
   date_joined: string
   has_password: boolean // false for Google-only accounts
+  avatar_url: string | null // profile photo link, or null for initials
 }
 
 export type RegisterInput = {

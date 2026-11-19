@@ -182,3 +182,95 @@ class GoogleLoginTests(AuthTestCase):
         verify.return_value = {"email": "x@gmail.com", "email_verified": False}
         res = self.client.post(self.url, {"credential": "x"}, format="json")
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+# ─── Profile photo ───────────────────────────────────────────────────────────
+import shutil
+import tempfile
+from io import BytesIO
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+from PIL import Image
+
+TEMP_MEDIA = tempfile.mkdtemp()
+
+
+def make_image(fmt="PNG", size=(600, 400), color=(20, 160, 80)):
+    buf = BytesIO()
+    Image.new("RGB", size, color).save(buf, format=fmt)
+    ext = {"PNG": "png", "JPEG": "jpg", "GIF": "gif", "WEBP": "webp"}[fmt]
+    return SimpleUploadedFile(f"photo.{ext}", buf.getvalue(), content_type=f"image/{ext}")
+
+
+@override_settings(
+    MEDIA_ROOT=TEMP_MEDIA,
+    STORAGES={
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    },
+)
+class AvatarTests(AuthTestCase):
+    url = "/api/v1/auth/me/avatar/"
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(TEMP_MEDIA, ignore_errors=True)
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        self.user = self.make_user()
+        self.client.force_authenticate(self.user)
+
+    def test_upload_makes_small_square_webp(self):
+        res = self.client.post(self.url, {"avatar": make_image()}, format="multipart")
+        self.assertEqual(res.status_code, status.HTTP_200_OK, res.data)
+        self.assertTrue(res.data["avatar_url"])
+        self.user.refresh_from_db()
+        with self.user.avatar.open() as f:
+            img = Image.open(f)
+            self.assertEqual(img.format, "WEBP")
+            self.assertEqual(img.size, (256, 256))
+
+    def test_new_photo_replaces_and_deletes_old_one(self):
+        self.client.post(self.url, {"avatar": make_image()}, format="multipart")
+        self.user.refresh_from_db()
+        old = self.user.avatar.name
+        self.client.post(self.url, {"avatar": make_image("JPEG")}, format="multipart")
+        self.user.refresh_from_db()
+        self.assertNotEqual(self.user.avatar.name, old)
+        self.assertFalse(self.user.avatar.storage.exists(old))
+
+    def test_remove_photo(self):
+        self.client.post(self.url, {"avatar": make_image()}, format="multipart")
+        self.user.refresh_from_db()
+        name = self.user.avatar.name
+        res = self.client.delete(self.url)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIsNone(res.data["avatar_url"])
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.avatar)
+        self.assertFalse(self.user.avatar.storage.exists(name))
+
+    def test_fake_image_rejected(self):
+        fake = SimpleUploadedFile("photo.png", b"not really an image", content_type="image/png")
+        res = self.client.post(self.url, {"avatar": fake}, format="multipart")
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_gif_rejected(self):
+        res = self.client.post(self.url, {"avatar": make_image("GIF")}, format="multipart")
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @override_settings(AVATAR_MAX_BYTES=100)
+    def test_too_big_rejected(self):
+        res = self.client.post(self.url, {"avatar": make_image()}, format="multipart")
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_must_be_logged_in(self):
+        self.client.force_authenticate(None)
+        res = self.client.post(self.url, {"avatar": make_image()}, format="multipart")
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_me_shows_no_photo_by_default(self):
+        res = self.client.get("/api/v1/auth/me/")
+        self.assertIsNone(res.data["avatar_url"])

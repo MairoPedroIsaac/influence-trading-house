@@ -7,6 +7,7 @@ apps/users/urls.py - Account routes, included at /api/v1/.
   POST  auth/logout/            kill the refresh token
   POST  auth/google/            sign in / sign up with Google
   GET   auth/me/                my profile
+  POST  auth/me/avatar/         upload profile photo (DELETE removes it)
   PATCH auth/me/                change my name
   POST  auth/password/change/   change password (logged in)
   POST  auth/password/forgot/   email me a reset link
@@ -16,6 +17,7 @@ apps/users/urls.py - Account routes, included at /api/v1/.
 from django.urls import path
 
 from .views import (
+    AvatarView,
     ChangePasswordView,
     ForgotPasswordView,
     GoogleLoginView,
@@ -34,6 +36,7 @@ urlpatterns = [
     path("auth/logout/", LogoutView.as_view(), name="logout"),
     path("auth/google/", GoogleLoginView.as_view(), name="google_login"),
     path("auth/me/", MeView.as_view(), name="me"),
+    path("auth/me/avatar/", AvatarView.as_view(), name="avatar"),
     path("auth/password/change/", ChangePasswordView.as_view(), name="password_change"),
     path("auth/password/forgot/", ForgotPasswordView.as_view(), name="password_forgot"),
     path("auth/password/reset/", ResetPasswordView.as_view(), name="password_reset"),

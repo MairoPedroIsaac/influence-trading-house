@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",  # lets logout kill a refresh token
+    "storages",  # S3 file storage (local RustFS or AWS S3)
     "corsheaders",
     # Local
     "apps.users",
@@ -98,6 +99,44 @@ USE_TZ = True
 
 # ─── Static files ─────────────────────────────────────────────────────────────
 STATIC_URL = "static/"
+
+# ─── Uploaded files (profile photos) ─────────────────────────────────────────
+# USE_S3=True: files go to an S3 bucket. Locally that is RustFS in Docker
+# (AWS_S3_ENDPOINT_URL set, with keys). On AWS: no endpoint and no keys,
+# the server's IAM role gives access. The bucket stays private: the API hands
+# out signed links that expire after 1 hour.
+# USE_S3=False: files are saved in backend/media (used by tests and CI).
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+USE_S3 = config("USE_S3", default=False, cast=bool)
+
+if USE_S3:
+    _default_storage = {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": config("AWS_STORAGE_BUCKET_NAME"),
+            "endpoint_url": config("AWS_S3_ENDPOINT_URL", default="") or None,
+            "access_key": config("AWS_ACCESS_KEY_ID", default="") or None,
+            "secret_key": config("AWS_SECRET_ACCESS_KEY", default="") or None,
+            "region_name": config("AWS_S3_REGION_NAME", default="us-east-1"),
+            "addressing_style": "path",
+            "signature_version": "s3v4",
+            "default_acl": None,          # private objects
+            "querystring_auth": True,     # signed links
+            "querystring_expire": 3600,   # 1 hour
+            "file_overwrite": False,
+        },
+    }
+else:
+    _default_storage = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
+
+STORAGES = {
+    "default": _default_storage,
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
+
+# Largest profile photo accepted, in bytes (2 MB).
+AVATAR_MAX_BYTES = 2 * 1024 * 1024
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ─── Django REST Framework ────────────────────────────────────────────────────
@@ -112,6 +151,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "auth": "10/min",
         "password_reset": "5/hour",
+        "upload": "20/hour",
     },
 }
 

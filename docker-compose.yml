@@ -17,5 +17,24 @@ services:
       timeout: 5s
       retries: 5
 
+  # Local S3-compatible storage for uploads (profile photos).
+  # RustFS speaks the same S3 API as AWS S3, so the Django code is identical
+  # locally and on AWS. (MinIO stopped publishing free Docker images in 2025.)
+  storage:
+    image: rustfs/rustfs:latest
+    container_name: ith_storage
+    restart: unless-stopped
+    command: /data
+    environment:
+      RUSTFS_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${STORAGE_SECRET_KEY}
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    volumes:
+      - storage_data:/data
+
 volumes:
   postgres_data:
+  storage_data:

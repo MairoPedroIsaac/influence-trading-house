@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
 import { useAuth } from '../auth/useAuth'
 import type { User } from '../auth/context'
 import { FormField } from '../components/FormField'
@@ -32,6 +32,82 @@ function SaveButton({ busy }: { busy: boolean }) {
     >
       {busy ? 'Saving...' : 'Save'}
     </button>
+  )
+}
+
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024
+
+function PhotoForm({ user }: { user: User }) {
+  const { setUser } = useAuth()
+  const toast = useToast()
+  const input = useRef<HTMLInputElement>(null)
+  const [busy, setBusy] = useState(false)
+
+  async function onFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = '' // allow choosing the same file again
+    if (!file) return
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      toast.error('Use a JPG, PNG or WebP photo.')
+      return
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      toast.error('Photo is too big', 'The limit is 2 MB.')
+      return
+    }
+    const body = new FormData()
+    body.append('avatar', file)
+    setBusy(true)
+    try {
+      setUser(await api<User>('/auth/me/avatar/', { method: 'POST', body }))
+      toast.success('Profile photo updated')
+    } catch (err) {
+      toast.error('Upload failed', err instanceof ApiError ? err.message : 'Try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function onRemove() {
+    setBusy(true)
+    try {
+      setUser(await api<User>('/auth/me/avatar/', { method: 'DELETE' }))
+      toast.info('Profile photo removed')
+    } catch {
+      toast.error('Could not remove the photo. Try again.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-5">
+      <Avatar user={user} size={72} />
+      <div className="space-y-2">
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => input.current?.click()}
+            className="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-50"
+          >
+            {busy ? 'Saving...' : user.avatar_url ? 'Change photo' : 'Upload photo'}
+          </button>
+          {user.avatar_url && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void onRemove()}
+              className="rounded-md border border-line px-4 py-2 text-sm text-muted hover:text-fg disabled:opacity-50"
+            >
+              Remove
+            </button>
+          )}
+        </div>
+        <p className="text-xs text-muted">JPG, PNG or WebP, up to 2 MB. We crop it to a square.</p>
+      </div>
+      <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => void onFile(e)} />
+    </div>
   )
 }
 
@@ -185,6 +261,10 @@ export default function Profile() {
           </p>
         </div>
       </div>
+
+      <Section title="Profile photo" text="Shown in the sidebar and on your profile. Without a photo we show your initials.">
+        <PhotoForm user={user} />
+      </Section>
 
       <Section title="Your details" text="Your name as it shows in ITH. Email cannot be changed.">
         <DetailsForm user={user} />

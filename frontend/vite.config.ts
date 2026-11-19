@@ -9,6 +9,8 @@ export default defineConfig({
     // In development, send /api calls to Django so the browser sees one site.
     proxy: {
       '/api': 'http://127.0.0.1:8000',
+      // Uploaded files when the backend saves to disk (USE_S3=False).
+      '/media': 'http://127.0.0.1:8000',
     },
   },
 })

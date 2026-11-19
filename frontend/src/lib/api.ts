@@ -78,7 +78,8 @@ async function doRefresh(): Promise<boolean> {
 
 export async function api<T>(path: string, options: RequestInit = {}, retry = true): Promise<T> {
   const headers = new Headers(options.headers)
-  if (options.body) headers.set('Content-Type', 'application/json')
+  // JSON by default. File uploads (FormData) set their own content type.
+  if (options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json')
   if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`)
 
   const res = await fetch(`${BASE}${path}`, { ...options, headers })

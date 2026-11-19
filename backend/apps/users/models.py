@@ -12,6 +12,8 @@ BaseUserManager gives us the helpers to create users/superusers via the CLI.
 """
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import uuid
+
 from django.db import models
 
 
@@ -33,6 +35,11 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+def avatar_path(instance, filename):
+    """Each upload gets a new random name, so old links never show a new photo."""
+    return f"avatars/{instance.pk}/{uuid.uuid4().hex}.webp"
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     Platform user. Identified by email, no username field.
@@ -42,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
+    avatar = models.ImageField(upload_to=avatar_path, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)   # can access Django admin
