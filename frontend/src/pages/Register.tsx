@@ -63,7 +63,7 @@ export default function Register() {
   }
 
   return (
-    <AuthCard title="Create your account">
+    <AuthCard title="Create your account" subtitle="It takes less than a minute. Then you can start logging trades straight away.">
       {googleEnabled && (
         <>
           <GoogleButton onCredential={onGoogle} />
@@ -101,7 +101,7 @@ export default function Register() {
       </form>
       <p className="mt-6 text-sm text-muted">
         Already have an account?{' '}
-        <Link to="/login" className="text-fg underline underline-offset-4">
+        <Link to="/login" className="font-medium text-fg underline underline-offset-4">
           Log in
         </Link>
       </p>

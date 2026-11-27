@@ -62,7 +62,7 @@ export default function Login() {
   }
 
   return (
-    <AuthCard title="Log in">
+    <AuthCard title="Welcome back" subtitle="Log in to see your alerts, journal and results.">
       {state?.message && (
         <div className="mb-4">
           <Notice kind="success">{state.message}</Notice>
@@ -106,7 +106,7 @@ export default function Login() {
       </form>
       <p className="mt-6 text-sm text-muted">
         No account yet?{' '}
-        <Link to="/register" className="text-fg underline underline-offset-4">
+        <Link to="/register" className="font-medium text-fg underline underline-offset-4">
           Sign up
         </Link>
       </p>

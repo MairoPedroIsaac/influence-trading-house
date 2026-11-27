@@ -6,6 +6,7 @@ import { Notice } from '../components/Notice'
 import { PasswordField } from '../components/PasswordField'
 import { AppLayout } from '../layouts/AppLayout'
 import { Avatar } from '../components/Avatar'
+import { Mt5Connect } from '../components/Mt5Connect'
 import { fullName } from '../lib/user'
 import { api, ApiError } from '../lib/api'
 import { useToast } from '../toast/useToast'
@@ -13,9 +14,9 @@ import { setTheme, useThemeChoice, type ThemeChoice } from '../lib/theme'
 
 function Section({ title, text, children }: { title: string; text: string; children: ReactNode }) {
   return (
-    <section className="grid gap-6 border-b border-line py-10 md:grid-cols-3">
+    <section className="grid gap-6 border-b border-line py-9 last:border-b-0 md:grid-cols-3">
       <div>
-        <h2 className="font-medium">{title}</h2>
+        <h2 className="text-lg font-bold tracking-[-0.01em]">{title}</h2>
         <p className="mt-1 text-sm text-muted">{text}</p>
       </div>
       <div className="md:col-span-2">{children}</div>
@@ -28,7 +29,7 @@ function SaveButton({ busy }: { busy: boolean }) {
     <button
       type="submit"
       disabled={busy}
-      className="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-50"
+      className="rounded-full bg-fg px-5 py-2.5 text-sm font-bold text-bg hover:opacity-90 disabled:opacity-50"
     >
       {busy ? 'Saving...' : 'Save'}
     </button>
@@ -89,7 +90,7 @@ function PhotoForm({ user }: { user: User }) {
             type="button"
             disabled={busy}
             onClick={() => input.current?.click()}
-            className="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-50"
+            className="rounded-full bg-fg px-5 py-2.5 text-sm font-bold text-bg hover:opacity-90 disabled:opacity-50"
           >
             {busy ? 'Saving...' : user.avatar_url ? 'Change photo' : 'Upload photo'}
           </button>
@@ -98,7 +99,7 @@ function PhotoForm({ user }: { user: User }) {
               type="button"
               disabled={busy}
               onClick={() => void onRemove()}
-              className="rounded-md border border-line px-4 py-2 text-sm text-muted hover:text-fg disabled:opacity-50"
+              className="rounded-full border border-line px-5 py-2.5 text-sm text-muted hover:text-fg disabled:opacity-50"
             >
               Remove
             </button>
@@ -228,14 +229,14 @@ function ThemePicker() {
     { value: 'system', label: 'System' },
   ]
   return (
-    <div role="radiogroup" aria-label="Theme" className="inline-flex rounded-md border border-line p-1">
+    <div role="radiogroup" aria-label="Theme" className="inline-flex rounded-full border border-line p-1">
       {options.map((o) => (
         <button
           key={o.value}
           role="radio"
           aria-checked={theme === o.value}
           onClick={() => setTheme(o.value)}
-          className={`rounded px-4 py-1.5 text-sm ${
+          className={`rounded-full px-4 py-1.5 text-sm ${
             theme === o.value ? 'bg-fg font-medium text-bg' : 'text-muted hover:text-fg'
           }`}
         >
@@ -252,15 +253,21 @@ export default function Profile() {
 
   return (
     <AppLayout title="Profile">
-      <div className="flex items-center gap-4">
-        <Avatar user={user} size={64} />
-        <div>
-          <p className="text-lg font-medium">{fullName(user)}</p>
-          <p className="text-sm text-muted">
-            Member since {new Date(user.date_joined).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+      <section className="relative isolate flex flex-wrap items-center gap-5 overflow-hidden rounded-3xl bg-black px-6 py-8 text-white sm:px-10">
+        <img src="/images/marble-black.webp" alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-50" />
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/80 to-black/40" />
+        <Avatar user={user} size={72} />
+        <div className="min-w-0">
+          <p className="text-[13px] uppercase tracking-[0.14em] text-neutral-400">Your account</p>
+          <p className="mt-1 truncate text-[clamp(1.6rem,3.5vw,2.4rem)] font-extrabold leading-tight tracking-[-0.035em]">{fullName(user)}</p>
+          <p className="mt-1 text-sm text-neutral-400">
+            {user.email} · Member since {new Date(user.date_joined).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
-      </div>
+      </section>
+      <Mt5Connect />
+
+      <div className="mt-6 rounded-3xl border border-line bg-surface px-6 sm:px-8">
 
       <Section title="Profile photo" text="Shown in the sidebar and on your profile. Without a photo we show your initials.">
         <PhotoForm user={user} />
@@ -284,6 +291,7 @@ export default function Profile() {
       <Section title="Appearance" text="Choose how your dashboard looks. System follows your device setting. Saved on this device.">
         <ThemePicker />
       </Section>
+      </div>
     </AppLayout>
   )
 }

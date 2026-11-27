@@ -20,7 +20,7 @@ const icon = (d: string) => (
 const MAIN: Item[] = [
   { to: '/dashboard', label: 'Overview', icon: icon('M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-18v6h8V3h-8Z') },
   { to: '/journal', label: 'Trade journal', icon: icon('M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2Zm4-12h8M8 11h6') },
-  { to: '/strategies', label: 'Strategies', icon: icon('M4 20V10M10 20V4M16 20v-8M22 20H2'), soon: true },
+  { to: '/my-strategies', label: 'Strategies', icon: icon('M4 20V10M10 20V4M16 20v-8M22 20H2') },
   { to: '/backtests', label: 'Backtests', icon: icon('M3 3v18h18M7 15l4-4 3 3 5-6'), soon: true },
   { to: '/alerts', label: 'Alerts', icon: icon('M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0'), soon: true },
 ]
@@ -31,10 +31,10 @@ const ACCOUNT: Item[] = [
 function NavItem({ item, onClick }: { item: Item; onClick: () => void }) {
   if (item.soon) {
     return (
-      <span className="flex cursor-default items-center gap-3 rounded-md px-3 py-2 text-sm text-muted/60">
+      <span className="flex cursor-default items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-neutral-600">
         {item.icon}
         <span className="flex-1">{item.label}</span>
-        <span className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider">Soon</span>
+        <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] uppercase tracking-wider text-neutral-500">Soon</span>
       </span>
     )
   }
@@ -43,8 +43,8 @@ function NavItem({ item, onClick }: { item: Item; onClick: () => void }) {
       to={item.to}
       onClick={onClick}
       className={({ isActive }) =>
-        `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
-          isActive ? 'bg-line text-fg' : 'text-muted hover:bg-line/50 hover:text-fg'
+        `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+          isActive ? 'bg-white font-semibold text-black' : 'text-neutral-400 hover:bg-white/5 hover:text-white'
         }`
       }
     >
@@ -60,7 +60,6 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const theme = useTheme()
-  const logo = theme === 'light' ? '/brand/ith-logo-horizontal-black.svg' : '/brand/ith-logo-horizontal-white.svg'
   const close = () => setOpen(false)
 
   async function onLogout() {
@@ -70,39 +69,39 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
   }
 
   const sidebar = (
-    <div className="flex h-full flex-col">
-      <Link to="/dashboard" aria-label="Go to overview" className="flex h-16 items-center border-b border-line px-5" onClick={close}>
-        <img src={logo} alt="Influence Trading House" className="h-10" />
+    <div className="flex h-full flex-col bg-black text-white">
+      <Link to="/dashboard" aria-label="Go to overview" className="flex h-16 items-center border-b border-white/10 px-5" onClick={close}>
+        <img src="/brand/ith-logo-horizontal-white.svg" alt="Influence Trading House" className="h-10" />
       </Link>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
         <div className="space-y-1">
-          <p className="px-3 pb-1 font-mono text-[11px] uppercase tracking-widest text-muted">Trading</p>
+          <p className="px-3 pb-1 text-[11px] uppercase tracking-[0.14em] text-neutral-500">Trading</p>
           {MAIN.map((item) => (
             <NavItem key={item.to} item={item} onClick={close} />
           ))}
         </div>
         <div className="space-y-1">
-          <p className="px-3 pb-1 font-mono text-[11px] uppercase tracking-widest text-muted">Account</p>
+          <p className="px-3 pb-1 text-[11px] uppercase tracking-[0.14em] text-neutral-500">Account</p>
           {ACCOUNT.map((item) => (
             <NavItem key={item.to} item={item} onClick={close} />
           ))}
         </div>
       </nav>
 
-      <div className="border-t border-line p-3">
+      <div className="border-t border-white/10 p-3">
         <div className="flex items-center gap-3 px-2 py-2">
           <Avatar user={user} size={36} />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm text-fg">
+            <p className="truncate text-sm font-medium text-white">
               {fullName(user)}
             </p>
-            <p className="truncate text-xs text-muted">{user?.email}</p>
+            <p className="truncate text-xs text-neutral-500">{user?.email}</p>
           </div>
         </div>
         <button
           onClick={() => void onLogout()}
-          className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-muted hover:bg-line/50 hover:text-fg"
+          className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-neutral-400 transition-colors hover:bg-white/5 hover:text-white"
         >
           {icon('M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9')}
           Log out
@@ -114,13 +113,13 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
   return (
     <div className={`min-h-screen bg-bg text-fg ${theme === 'light' ? 'theme-light' : ''}`}>
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-line bg-surface lg:block">{sidebar}</aside>
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-white/10 bg-black lg:block">{sidebar}</aside>
 
       {/* Phone sidebar */}
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button aria-label="Close menu" className="absolute inset-0 bg-black/60" onClick={close} />
-          <aside className="absolute inset-y-0 left-0 w-72 border-r border-line bg-surface">{sidebar}</aside>
+          <aside className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-white/10 bg-black">{sidebar}</aside>
         </div>
       )}
 
@@ -133,7 +132,7 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
           >
             {icon('M3 6h18M3 12h18M3 18h18')}
           </button>
-          <h1 className="flex-1 text-lg font-semibold">{title}</h1>
+          <h1 className="flex-1 text-lg font-bold tracking-[-0.02em]">{title}</h1>
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
@@ -145,7 +144,7 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
               : icon('M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4 7 17M17 7l1.4-1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z')}
           </button>
         </header>
-        <main className="px-4 py-8 sm:px-8">{children}</main>
+        <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-8">{children}</main>
       </div>
     </div>
   )

@@ -1,8 +1,8 @@
 // Small message box: red for errors, green for success.
 export function Notice({ kind, children }: { kind: 'error' | 'success'; children: React.ReactNode }) {
-  const style = kind === 'error' ? 'border-sell/40 text-sell' : 'border-buy/40 text-buy'
+  const style = kind === 'error' ? 'border-sell/40 bg-sell/10 text-sell' : 'border-buy/40 bg-buy/10 text-buy'
   return (
-    <p role={kind === 'error' ? 'alert' : 'status'} className={`rounded-md border px-3 py-2 text-sm ${style}`}>
+    <p role={kind === 'error' ? 'alert' : 'status'} className={`rounded-xl border px-4 py-3 text-sm ${style}`}>
       {children}
     </p>
   )

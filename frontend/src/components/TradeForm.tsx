@@ -11,12 +11,12 @@ type Props = {
 }
 
 const inputCls =
-  'w-full rounded-md border border-line bg-bg px-3 py-2 text-fg outline-none placeholder:text-muted/60 focus:border-fg'
+  'h-11 w-full rounded-xl border border-line bg-bg px-3.5 text-fg outline-none transition-colors placeholder:text-muted/60 hover:border-muted/60 focus:border-fg'
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm text-muted">{label}</span>
+      <span className="mb-2 block text-sm font-medium text-fg/80">{label}</span>
       {children}
     </label>
   )
@@ -95,6 +95,14 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
+
+  // Picking a result fills the exit price for you: Win = take profit,
+  // Loss = stop loss, Breakeven = entry. You can still change it.
+  function setResult(e: { target: { value: string } }) {
+    const status = e.target.value as Status
+    const guess = status === 'WIN' ? f.take_profit : status === 'LOSS' ? f.stop_loss : status === 'BE' ? f.entry_price : ''
+    setF({ ...f, status, exit_price: f.exit_price || guess })
+  }
   const closed = f.status !== 'OPEN'
   const fromMt5 = trade?.source === 'MT5'
 
@@ -144,7 +152,7 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      {fromMt5 && <p className="text-xs text-muted">This trade came from MT5. Edit with care.</p>}
+      {fromMt5 && <p className="text-sm text-muted">This trade came from MT5 automatically. You can still add notes or change the strategy.</p>}
       {restored && (
         <p className="text-sm text-muted">
           We kept what you typed last time.{' '}
@@ -159,7 +167,7 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
           <input className={`${inputCls} uppercase`} placeholder="EURUSD" required value={f.symbol} onChange={set('symbol')} />
         </Field>
         <Field label="Side">
-          <div className="grid grid-cols-2 gap-1 rounded-md border border-line p-1">
+          <div className="grid grid-cols-2 gap-1 rounded-xl border border-line p-1">
             {(['BUY', 'SELL'] as Side[]).map((s) => (
               <button
                 key={s}
@@ -207,7 +215,7 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
       </div>
 
       <Field label="Result">
-        <select className={inputCls} value={f.status} onChange={set('status')}>
+        <select className={inputCls} value={f.status} onChange={setResult}>
           <option value="OPEN">Open</option>
           <option value="WIN">Win</option>
           <option value="LOSS">Loss</option>
@@ -216,12 +224,9 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
       </Field>
 
       {closed && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <Field label="Exit price">
             <input className={`${inputCls} font-mono`} inputMode="decimal" value={f.exit_price} onChange={set('exit_price')} />
-          </Field>
-          <Field label="Closed">
-            <input type="datetime-local" className={inputCls} value={f.closed_at} onChange={set('closed_at')} />
           </Field>
           <Field label="Profit / loss">
             <input className={`${inputCls} font-mono`} inputMode="decimal" placeholder="-25.00" value={f.profit} onChange={set('profit')} />
@@ -236,7 +241,7 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
       {error && <Notice kind="error">{error}</Notice>}
 
       <div className="flex flex-wrap items-center gap-2 pt-2">
-        <button type="submit" disabled={busy} className="rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-50">
+        <button type="submit" disabled={busy} className="rounded-full bg-fg px-5 py-2.5 text-sm font-bold text-bg hover:opacity-90 disabled:opacity-50">
           {busy ? 'Saving...' : trade ? 'Save changes' : 'Add trade'}
         </button>
         <button
@@ -245,7 +250,7 @@ export function TradeForm({ trade, onSaved, onDeleted, onCancel }: Props) {
             if (isNew) clearDraft()
             onCancel()
           }}
-          className="rounded-md border border-line px-4 py-2 text-sm text-muted hover:text-fg"
+          className="rounded-full border border-line px-5 py-2.5 text-sm text-muted hover:text-fg"
         >
           Cancel
         </button>

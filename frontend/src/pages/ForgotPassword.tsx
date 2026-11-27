@@ -31,7 +31,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <AuthCard title="Forgot your password?">
+    <AuthCard title="Forgot your password?" subtitle="Enter the email you signed up with and we will send you a link to choose a new one.">
       {sent ? (
         <div className="space-y-4">
           <Notice kind="success">
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
         </form>
       )}
       <p className="mt-6 text-sm text-muted">
-        <Link to="/login" className="text-fg underline underline-offset-4">
+        <Link to="/login" className="font-medium text-fg underline underline-offset-4">
           Back to log in
         </Link>
       </p>

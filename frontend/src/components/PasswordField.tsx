@@ -8,20 +8,20 @@ export function PasswordField({ label, id, ...props }: Props) {
 
   return (
     <label htmlFor={id} className="block">
-      <span className="mb-1.5 block text-sm text-muted">{label}</span>
+      <span className="mb-2 block text-sm font-medium text-fg/80">{label}</span>
       <span className="relative block">
         <input
           id={id}
           type={show ? 'text' : 'password'}
           {...props}
-          className="peer w-full rounded-md border border-line bg-bg py-2.5 pr-11 pl-3 text-fg outline-none placeholder:text-muted/60 focus:border-fg"
+          className="peer h-12 w-full rounded-xl border border-line bg-surface pr-12 pl-4 text-fg outline-none transition-colors placeholder:text-muted/60 hover:border-muted/60 focus:border-fg"
         />
         <button
           type="button"
           onClick={() => setShow((s) => !s)}
           aria-label={show ? 'Hide password' : 'Show password'}
           aria-pressed={show}
-          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted hover:text-fg peer-autofill:text-neutral-500 peer-autofill:hover:text-neutral-900"
+          className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted hover:text-fg peer-autofill:text-neutral-500 peer-autofill:hover:text-neutral-900"
         >
           {show ? <EyeOffIcon /> : <EyeIcon />}
         </button>

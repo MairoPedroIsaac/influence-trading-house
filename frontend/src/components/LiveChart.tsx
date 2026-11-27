@@ -110,7 +110,7 @@ export function LiveChart() {
       {/* live price line and label */}
       <line x1={PAD.left} x2={W - PAD.right} y1={y(last.c)} y2={y(last.c)} stroke={lastUp ? '#16a34a' : '#dc2626'} strokeDasharray="3 3" strokeOpacity={0.8} />
       <rect x={W - PAD.right + 4} y={y(last.c) - 10} width={PAD.right - 6} height={20} rx={3} fill={lastUp ? '#16a34a' : '#dc2626'} />
-      <text x={W - PAD.right + 8} y={y(last.c) + 4} fill="#0a0a0a" fontSize={11} fontFamily="JetBrains Mono, monospace" fontWeight={500}>
+      <text x={W - PAD.right + 8} y={y(last.c) + 4} fill="#0a0a0a" fontSize={11} fontFamily="Geist Mono, monospace" fontWeight={500}>
         {last.c.toFixed(5)}
       </text>
     </svg>

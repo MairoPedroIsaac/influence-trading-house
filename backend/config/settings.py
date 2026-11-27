@@ -152,6 +152,7 @@ REST_FRAMEWORK = {
         "auth": "10/min",
         "password_reset": "5/hour",
         "upload": "20/hour",
+        "mt5": "120/min",
     },
 }
 

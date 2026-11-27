@@ -10,8 +10,8 @@ export type Trade = {
   side: Side
   lots: string
   entry_price: string
-  stop_loss: string
-  take_profit: string
+  stop_loss: string | null
+  take_profit: string | null
   exit_price: string | null
   opened_at: string
   closed_at: string | null
