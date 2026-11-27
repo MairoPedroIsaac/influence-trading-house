@@ -16,8 +16,9 @@ export default function Features() {
         title="Prove your edge."
         muted="Then trade it."
         text="Your MT5 trades saved for you, with real stats for every strategy. Plus alerts and EAs for traders who want results they can measure."
-        image="/images/features-laptop.webp"
-        imageAlt="A laptop showing a dark trading chart"
+        image="/images/features-chart-poster.webp"
+        video="/videos/features-chart.mp4"
+        imageAlt="Green and red candles moving on a trading screen"
       />
       <section className="mx-auto max-w-[1240px] px-5 pt-20 sm:px-6">
 
@@ -112,7 +113,7 @@ export default function Features() {
               <div className="h-full rounded-3xl bg-white p-8 text-black">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-[13px] font-semibold text-neutral-700">Backtesting</p>
-                  <span className="text-[11px] uppercase tracking-[0.1em] text-neutral-500">Coming soon</span>
+                  <span className="text-[11px] uppercase tracking-[0.1em] text-[#666666]">Coming soon</span>
                 </div>
                 <h3 className="mt-2.5 text-[28px] font-extrabold leading-[1.05] tracking-[-0.035em]">Know your numbers before you risk money.</h3>
                 <p className="mt-2.5 text-[15px] text-neutral-700">Run a strategy on past data and see its win rate, risk to reward and worst losing streak.</p>

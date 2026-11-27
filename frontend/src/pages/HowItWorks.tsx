@@ -17,9 +17,9 @@ export default function HowItWorks() {
         title="Three steps."
         muted="No guessing."
         text="Connect MT5 once. After that, every trade is saved for you, and your numbers update by themselves."
-        image="/images/how-typing.webp"
-        imageAlt="Hands typing on a laptop in a dark room"
-        imagePos="40% center"
+        image="/images/how-trader-poster.webp"
+        video="/videos/how-trader.mp4"
+        imageAlt="A trader typing with charts open on two laptops"
       />
       <section className="mx-auto max-w-[1240px] px-5 pt-20 sm:px-6">
           <div className="grid gap-4 md:grid-cols-3">

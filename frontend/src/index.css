@@ -8,6 +8,9 @@
   --color-muted: #8a8a8a;
   --color-buy: #16a34a;
   --color-sell: #dc2626;
+  /* Lighter greys so small text stays readable on black */
+  --color-neutral-500: #8f8f8f;
+  --color-neutral-600: #7c7c7c;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, Consolas, monospace;
@@ -94,6 +97,8 @@ body {
   --color-muted: #525252;
   --color-buy: #15803d;
   --color-sell: #b91c1c;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
   color-scheme: light;
 }
 
@@ -105,3 +110,7 @@ summary,
 label[for] {
   cursor: pointer;
 }
+
+/* Red text a little brighter on black so it is easy to read. Red buttons keep the normal red. */
+.text-sell { color: #f05252; }
+.theme-light .text-sell { color: var(--color-sell); }

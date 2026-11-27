@@ -33,7 +33,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
 }
 
 // Big title block at the top of an inner page: text on the left, a photo on the right.
-export function PageHero({ eyebrow, title, muted, text, image, imageAlt, imagePos = 'center' }: { eyebrow: string; title: string; muted: string; text: string; image?: string; imageAlt?: string; imagePos?: string }) {
+export function PageHero({ eyebrow, title, muted, text, image, imageAlt, imagePos = 'center', video }: { eyebrow: string; title: string; muted: string; text: string; image?: string; imageAlt?: string; imagePos?: string; video?: string }) {
+  const calm = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
   return (
     <div className="relative isolate overflow-hidden border-b border-white/10">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
@@ -51,7 +52,11 @@ export function PageHero({ eyebrow, title, muted, text, image, imageAlt, imagePo
         </div>
         {image && (
           <div className="animate-rise group relative overflow-hidden rounded-3xl border border-white/10 [animation-delay:300ms]">
-            <img src={image} alt={imageAlt ?? ''} className="aspect-[4/3] w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105 lg:aspect-[5/4]" style={{ objectPosition: imagePos }} />
+            {video && !calm ? (
+              <video src={video} poster={image} autoPlay muted loop playsInline preload="metadata" aria-label={imageAlt} className="aspect-video w-full object-cover" style={{ objectPosition: imagePos }} />
+            ) : (
+              <img src={image} alt={imageAlt ?? ''} className={`${video ? 'aspect-video' : 'aspect-[4/3] lg:aspect-[5/4]'} w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105`} style={{ objectPosition: imagePos }} />
+            )}
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           </div>
         )}
