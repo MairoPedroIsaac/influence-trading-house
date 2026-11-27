@@ -10,7 +10,17 @@ const PAGES = [
   { to: '/how-it-works', label: 'How it works' },
 ]
 
-const navClass = ({ isActive }: { isActive: boolean }) => `transition-colors hover:text-white ${isActive ? 'text-white' : 'text-neutral-400'}`
+// Laptop menu: the page you are on is white with a green dot under it; the rest are grey.
+const navClass = ({ isActive }: { isActive: boolean }) =>
+  `relative py-2 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-1/2 after:h-1 after:w-1 after:-translate-x-1/2 after:rounded-full after:bg-buy after:transition-opacity ${
+    isActive ? 'font-semibold text-white after:opacity-100' : 'text-neutral-400 after:opacity-0'
+  }`
+
+// Phone menu: the page you are on gets a lit-up row and a green dot. The other rows are grey with an arrow to go there.
+const phoneClass = ({ isActive }: { isActive: boolean }) =>
+  `flex min-h-14 items-center gap-3 rounded-2xl px-4 text-lg font-semibold transition-colors ${
+    isActive ? 'bg-white/[0.08] text-white' : 'text-neutral-500 hover:text-white'
+  }`
 
 export function Header() {
   const { user } = useAuth()
@@ -62,16 +72,30 @@ export function Header() {
 
       {/* Phone menu */}
       {open && (
-        <nav aria-label="Main" className="absolute inset-x-0 top-full border-b border-white/10 bg-[#050505] px-5 pb-6 pt-2 md:hidden">
+        <nav aria-label="Main" className="animate-rise absolute inset-x-0 top-full space-y-1 border-b border-white/10 bg-[#050505] px-3 pb-5 pt-3 [animation-duration:300ms] md:hidden">
           {PAGES.map((p) => (
-            <NavLink key={p.to} to={p.to} end onClick={() => setOpen(false)} className={({ isActive }) => `block border-b border-white/10 py-4 text-lg font-semibold ${isActive ? 'text-white' : 'text-neutral-300'}`}>
-              {p.label}
+            <NavLink key={p.to} to={p.to} end onClick={() => setOpen(false)} className={phoneClass}>
+              {({ isActive }) => (
+                <>
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${isActive ? 'bg-buy' : 'bg-white/15'}`} aria-hidden="true" />
+                  <span className="flex-1">{p.label}</span>
+                  {!isActive && (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-neutral-600">
+                      <path d="m9 6 6 6-6 6" />
+                    </svg>
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
           {!user && (
-            <Link to="/login" onClick={() => setOpen(false)} className="block py-4 text-lg font-semibold text-neutral-300">
-              Log in
-            </Link>
+            <NavLink to="/login" onClick={() => setOpen(false)} className={phoneClass}>
+              <span className="h-2 w-2 shrink-0 rounded-full bg-white/15" aria-hidden="true" />
+              <span className="flex-1">Log in</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-neutral-600">
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </NavLink>
           )}
         </nav>
       )}
