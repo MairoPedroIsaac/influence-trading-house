@@ -50,3 +50,6 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Screenshots from Claude (keep out of the repo)
+Claude outputs/
