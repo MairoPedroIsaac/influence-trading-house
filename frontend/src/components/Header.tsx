@@ -1,3 +1,4 @@
+import { Logo } from './Logo'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
@@ -19,7 +20,7 @@ export function Header() {
     <header className="relative z-40 border-b border-white/10 bg-[#050505]/80 backdrop-blur">
       <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between gap-4 px-5 sm:px-6">
         <Link to="/" aria-label="Influence Trading House home" className="shrink-0">
-          <img src="/brand/ith-logo-horizontal-white.svg" alt="Influence Trading House" className="h-9 w-auto sm:h-10" />
+          <Logo />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-8 text-sm md:flex">

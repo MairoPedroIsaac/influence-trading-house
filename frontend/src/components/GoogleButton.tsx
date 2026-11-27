@@ -66,5 +66,5 @@ export function GoogleButton({ onCredential }: { onCredential: (credential: stri
 
   if (!CLIENT_ID) return null
   if (failed) return <p className="text-center text-sm text-muted">Google sign in is not available right now.</p>
-  return <div ref={ref} className="flex min-h-11 w-full justify-center" />
+  return <div ref={ref} className="flex min-h-11 w-full max-w-full justify-center overflow-hidden" />
 }

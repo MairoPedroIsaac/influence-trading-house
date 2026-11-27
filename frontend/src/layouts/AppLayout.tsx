@@ -1,3 +1,4 @@
+import { Logo } from '../components/Logo'
 import { useState, type ReactNode } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
@@ -71,7 +72,7 @@ export function AppLayout({ title, children }: { title: string; children: ReactN
   const sidebar = (
     <div className="flex h-full flex-col bg-black text-white">
       <Link to="/dashboard" aria-label="Go to overview" className="flex h-16 items-center border-b border-white/10 px-5" onClick={close}>
-        <img src="/brand/ith-logo-horizontal-white.svg" alt="Influence Trading House" className="h-10" />
+        <Logo size="sm" />
       </Link>
 
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">

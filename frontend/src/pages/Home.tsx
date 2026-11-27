@@ -3,6 +3,7 @@ import { useAuth } from '../auth/useAuth'
 import { LiveChart } from '../components/LiveChart'
 import { Reveal } from '../components/Reveal'
 import { CountUp } from '../components/CountUp'
+import { Accordion } from '../components/Accordion'
 import { Arrow, CtaBand, PublicLayout, Side } from '../components/marketing'
 
 // Example prices for the moving ticker strip (not live market data).
@@ -18,9 +19,9 @@ const TAPE = [
 ]
 
 const EXPLORE = [
-  { to: '/features', n: '01', title: 'Features', text: 'Alerts, EAs, a trade journal and backtests. Everything in one place.' },
-  { to: '/strategies', n: '02', title: 'Strategies', text: 'Run BTMM and InfluenceX, or bring your own rules.' },
-  { to: '/how-it-works', n: '03', title: 'How it works', text: 'Connect MT5 once. Up and running in three steps.' },
+  { to: '/features', title: 'Features', text: 'An automatic trade journal, real stats for every strategy, plus alerts and EAs.', img: '/images/features-chart-poster.webp', alt: 'Green and red candles on a trading screen' },
+  { to: '/strategies', title: 'Strategies', text: 'Run BTMM and InfluenceX, or bring your own rules. Each one keeps its own numbers.', img: '/images/strategies-knights.webp', alt: 'A black and a white chess knight facing each other' },
+  { to: '/how-it-works', title: 'How it works', text: 'Connect MT5 once. Up and running in three steps.', img: '/images/how-trader-poster.webp', alt: 'A trader with charts open on two laptops' },
 ]
 
 export default function Home() {
@@ -70,7 +71,7 @@ export default function Home() {
             </div>
 
             {/* Live chart with floating alert and result */}
-            <div className="relative min-w-0 pb-16">
+            <div className="relative min-w-0 sm:pb-16">
               <div className="rounded-[18px] border border-white/15 bg-[#0b0b0b] p-2.5 shadow-[0_40px_120px_rgba(34,197,94,0.10)]">
                 <div className="overflow-hidden rounded-[10px] border border-white/10 bg-[#0f0f0f]">
                   <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
@@ -103,26 +104,27 @@ export default function Home() {
               </div>
               <div className="mx-auto h-2.5 w-[86%] rounded-b-2xl bg-[#1a1a1a]" />
 
-              <div className="animate-float absolute -top-6 right-0 rounded-2xl border border-white/15 bg-[#141414]/85 px-[18px] py-3.5 backdrop-blur sm:-right-2">
+              {/* Last result: floats on bigger screens only */}
+              <div className="animate-float absolute -top-6 right-0 hidden rounded-2xl border border-white/15 bg-[#141414]/85 px-[18px] py-3.5 backdrop-blur sm:-right-2 sm:block">
                 <p className="text-[11px] uppercase tracking-[0.08em] text-neutral-400">Last trade</p>
                 <p className="tabular mt-1 font-mono text-3xl font-semibold tracking-tight text-buy">+3.0R</p>
               </div>
 
-              <div className="animate-float-slow absolute bottom-0 left-0 w-[230px] rounded-[30px] border border-white/15 bg-[#0a0a0a] p-2 shadow-[0_30px_80px_rgba(0,0,0,0.7)] sm:-left-4">
-                <div className="rounded-[23px] bg-[#121212] px-3.5 pb-3.5 pt-4">
-                  <div className="mx-auto mb-3.5 h-1.5 w-16 rounded-full bg-white/10" />
-                  <p className="text-[11px] text-neutral-400">Strategy setup found</p>
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <span className="text-[17px] font-bold">EUR/USD</span>
-                    <Side side="BUY" />
-                  </div>
-                  <dl className="tabular mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 font-mono text-xs">
-                    <dt className="text-neutral-500">Entry</dt><dd className="text-right">1.08420</dd>
-                    <dt className="text-neutral-500">Stop</dt><dd className="text-right text-sell">1.08190</dd>
-                    <dt className="text-neutral-500">Target</dt><dd className="text-right text-buy">1.08880</dd>
-                    <dt className="text-neutral-500">Lot</dt><dd className="text-right">0.25</dd>
-                  </dl>
+              {/* A trade that just synced from MT5. Phones: sits under the chart. Bigger screens: floats on the corner. */}
+              <div className="animate-float-slow mt-4 rounded-2xl border border-white/15 bg-[#0d0d0d]/90 p-4 shadow-[0_30px_80px_rgba(0,0,0,0.7)] backdrop-blur sm:absolute sm:-left-4 sm:bottom-0 sm:mt-0 sm:w-[260px]">
+                <div className="flex items-center justify-between text-[11px] text-neutral-400">
+                  <span>MT5 · trade closed</span>
+                  <span className="inline-flex items-center gap-1.5 text-buy">
+                    <span className="animate-pulse-dot h-1.5 w-1.5 rounded-full bg-buy" /> Saved
+                  </span>
                 </div>
+                <div className="mt-2.5 flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2.5 text-[17px] font-bold">
+                    EUR/USD <Side side="BUY" />
+                  </span>
+                  <span className="tabular font-mono text-lg font-semibold text-buy">+458.00</span>
+                </div>
+                <p className="mt-2 text-[12px] text-neutral-400">Added to your journal under BTMM</p>
               </div>
             </div>
           </section>
@@ -245,20 +247,27 @@ export default function Home() {
             <p className="text-[13px] uppercase tracking-[0.14em] text-neutral-400">Explore ITH</p>
             <h2 className="font-display-wide mt-3.5 max-w-[820px] text-[clamp(2rem,4.4vw,3.75rem)]">Everything a rule-based trader needs.</h2>
           </Reveal>
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {EXPLORE.map((e, i) => (
-              <Reveal key={e.to} delay={i * 100} className="h-full">
-                <Link to={e.to} className="group flex h-full min-h-[240px] flex-col rounded-3xl border border-white/10 bg-[#0c0c0c] p-8 transition duration-300 hover:-translate-y-1 hover:border-white/30">
-                  <span className="tabular font-mono text-sm text-neutral-500">{e.n}</span>
-                  <h3 className="mt-auto text-[28px] font-extrabold tracking-[-0.035em]">{e.title}</h3>
-                  <p className="mt-2 leading-relaxed text-neutral-400">{e.text}</p>
-                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">
-                    Learn more <Arrow />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="mt-12">
+            <Accordion
+              split
+              items={EXPLORE.map((e) => ({
+                title: e.title,
+                content: (
+                  <>
+                    <p className="max-w-[460px] text-lg leading-relaxed text-neutral-400">{e.text}</p>
+                    <Link to={e.to} className="group mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-bold text-black transition-opacity hover:opacity-90">
+                      Open {e.title} <Arrow />
+                    </Link>
+                  </>
+                ),
+                visual: (
+                  <div className="overflow-hidden rounded-3xl border border-white/10">
+                    <img src={e.img} alt={e.alt} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                  </div>
+                ),
+              }))}
+            />
+          </Reveal>
         </section>
 
         {/* Founder story */}

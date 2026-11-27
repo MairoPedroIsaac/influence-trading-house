@@ -1,3 +1,4 @@
+import { Logo } from './Logo'
 import { Link } from 'react-router-dom'
 
 // Dark footer for the public pages (home, privacy, terms).
@@ -14,9 +15,9 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[1240px] px-5 pb-8 pt-16 sm:px-6">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div className="col-span-2 md:col-span-1">
-            <img src="/brand/ith-logo-horizontal-white.svg" alt="Influence Trading House" className="h-11 w-auto" />
+            <Logo size="lg" />
             <p className="mt-4 max-w-[320px] text-sm leading-relaxed text-neutral-400">
-              Backtesting, alerts, EAs and a trade journal for MetaTrader 5 traders.
+              An automatic trade journal with real stats for every strategy, built for MetaTrader 5 traders.
             </p>
           </div>
           <div className="flex flex-col gap-2.5 text-sm">
